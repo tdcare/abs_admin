@@ -35,8 +35,13 @@ yaml-rust = "0.4"
 #captcha
 captcha = "0.0.8"
 #http client,use rust-tls replace to native tls
-reqwest = { version = "0.11",default-features = false, features = ["json","rustls-tls"] }
+reqwest = { version = "0.10",default-features = false, features = ["json","rustls-tls","blocking"] }
+#tokio = { version = "1.11.0", features = ["full"] }
 #image code
 image = "0.23"
 #async trait
 async-trait = "0.1"
+
+async-std = "1.10.0"
+
+hyper = { version = "0.14", features = ["full"] }

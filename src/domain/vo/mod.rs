@@ -4,12 +4,14 @@ pub mod res;
 pub mod role;
 pub mod sign_in;
 pub mod user;
+pub mod keycloak;
 
 pub use dict::*;
 pub use jwt::*;
 pub use res::*;
 pub use role::*;
 pub use sign_in::*;
+pub use keycloak::*;
 
 use crate::error::Error;
 use crate::service::CONTEXT;

@@ -1,6 +1,6 @@
 use abs_admin::controller::{
     img_controller, sys_dict_controller, sys_res_controller, sys_role_controller,
-    sys_user_controller,
+    sys_user_controller,test_controller,
 };
 use abs_admin::service::CONTEXT;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
@@ -10,11 +10,21 @@ async fn index() -> impl Responder {
     HttpResponse::Ok()
         .set_header("Access-Control-Allow-Origin", "*")
         .set_header("Cache-Control", "no-cache")
-        .body("[abs_admin] Hello !")
+        .set_header("Content-Type","text/json;charset=UTF-8")
+        .body("[abs_admin] 您好 !")
+}
+
+async fn test() -> impl Responder {
+    HttpResponse::Ok()
+        .set_header("Access-Control-Allow-Origin", "*")
+        .set_header("Cache-Control", "no-cache")
+        .set_header("Content-Type","text/json;charset=UTF-8")
+        .body("[abs_admin] 测试 !")
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+
     //日志追加器
     abs_admin::config::log::init_log();
     info!(
@@ -26,6 +36,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(abs_admin::middleware::auth::Auth)
             .route("/", web::get().to(index))
+            .route("/test",web::get().to(test))
+            .route("/test/keycloak",web::get().to(test_controller::info))
             .route(
                 "/admin/sys_login",
                 web::post().to(sys_user_controller::login),

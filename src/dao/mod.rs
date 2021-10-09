@@ -1,6 +1,7 @@
 use crate::config::app_config::ApplicationConfig;
 use rbatis::plugin::logic_delete::RbatisLogicDeletePlugin;
 use rbatis::rbatis::Rbatis;
+use crate::domain::vo::Keys;
 
 pub mod mapper;
 
@@ -18,11 +19,12 @@ pub async fn init_rbatis(config: &ApplicationConfig) -> Rbatis {
         );
     }
     //连接数据库
-    println!("[abs_admin] rbatis link database({})...",&config.database_url[0..config.database_url.find(":").unwrap_or(0)]);
+    println!("[abs_admin] rbatis 开始 link database({})...",&config.database_url[0..config.database_url.find(":").unwrap_or(0)]);
     rbatis
         .link(&config.database_url)
         .await
         .expect("[abs_admin] rbatis link database fail!");
-    println!("[abs_admin] rbatis link database success!");
+    println!("[abs_admin] rbatis 连接 database 成功!");
     return rbatis;
 }
+

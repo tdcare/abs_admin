@@ -55,7 +55,7 @@ where
 
         Box::pin(async move {
             let value = HeaderValue::from_str("").unwrap();
-            let token = req.headers().get("access_token").unwrap_or(&value);
+            let token = req.headers().get("Authorization").unwrap_or(&value);
             let path = req.path().to_string();
             if !is_white_list_api(&path) {
                 //非白名单检查token是否有效
@@ -110,16 +110,28 @@ fn is_white_list_api(path: &str) -> bool {
 ///校验token是否有效，未过期
 async fn checked_token(token: &HeaderValue, path: &str) -> Result<JWTToken, crate::error::Error> {
     //check token alive
-    let token_value = token.to_str().unwrap_or("");
-    let token = JWTToken::verify(&CONTEXT.config.jwt_secret, token_value);
-    match token {
-        Ok(token) => {
-            return Ok(token);
-        }
-        Err(e) => {
-            return Err(crate::error::Error::from(e.to_string()));
-        }
-    }
+    let token_value = token.to_str().unwrap_or("").strip_prefix("Bearer ").unwrap();
+
+    match &CONTEXT.config.keycloak_auth_server_certs.is_empty(){
+          false=>{
+           //   return  JWTToken::verify(&CONTEXT.config.jwt_secret, token_value);
+             let n=&CONTEXT.keycloak_keys.keys[0].n.as_ref().clone().unwrap();
+             let e=&CONTEXT.keycloak_keys.keys[0].e.as_ref().clone().unwrap();
+              return  JWTToken::verify_with_keycloak(n,e, token_value);
+          }
+         _=>{
+             return JWTToken::verify(&CONTEXT.config.jwt_secret, token_value);
+         }
+   };
+
+    // match jwt_token {
+    //     Ok(token) => {
+    //         return Ok(jwt_token);
+    //     }
+    //     Err(e) => {
+    //         return Err(crate::error::Error::from(e.to_string()));
+    //     }
+    // }
 }
 
 ///权限校验

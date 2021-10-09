@@ -37,6 +37,11 @@ pub struct ApplicationConfig {
     pub login_fail_retry: i64,
     ///重试等待时间
     pub login_fail_retry_wait_sec: i64,
+    /// keycloak 服务器秘钥
+    pub keycloak_auth_server_certs: String,
+
+    // pub keycloak_realm: String,
+
 }
 
 ///默认配置
@@ -107,6 +112,10 @@ impl Default for ApplicationConfig {
             login_fail_retry_wait_sec: get_cfg(&docs, "login_fail_retry_wait_sec")
                 .as_i64()
                 .unwrap_or(0)
+                .to_owned(),
+            keycloak_auth_server_certs: get_cfg(&docs, "keycloak_auth_server_certs")
+                .as_str()
+                .unwrap_or("")
                 .to_owned(),
         };
 
