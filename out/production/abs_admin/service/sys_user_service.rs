@@ -247,7 +247,7 @@ impl SysUserService {
             .rbatis
             .fetch_by_wrapper(CONTEXT.rbatis.new_wrapper().eq("id", &token.id))
             .await?;
-        let user = user.ok_or_else(|| Error::from(format!("账号:{} 不存在!", token.id)))?;
+        let user = user.ok_or_else(|| Error::from(format!("账号:{} 不存在!", token.account)))?;
         return self.get_user_info(&user).await;
     }
 
@@ -270,31 +270,10 @@ impl SysUserService {
         sign_vo.permissions = self.loop_load_level_permission(&user_id, &all_res).await?;
         let jwt_token = JWTToken {
             id: user.id.clone().unwrap_or(String::new()),
-            // account: user.account.clone().unwrap_or(String::new()),
-            // permissions: sign_vo.permissions.clone(),
-            // role_ids: vec![],
+            account: user.account.clone().unwrap_or(String::new()),
+            permissions: sign_vo.permissions.clone(),
+            role_ids: vec![],
             exp: chrono::NaiveDateTime::now().timestamp() as usize,
-            iat: todo!(),
-            jti: todo!(),
-            iss: todo!(),
-            sub: todo!(),
-            typ: todo!(),
-            azp: todo!(),
-            session_state: todo!(),
-            acr: todo!(),
-            scope: todo!(),
-            departmentName: todo!(),
-            // address: todo!(),
-            departmentCode: todo!(),
-            departmentId: todo!(),
-            roles: todo!(),
-            groups: todo!(),
-            dept: todo!(),
-            preferred_username: todo!(),
-            given_name: todo!(),
-            userId: todo!(),
-            name: todo!(),
-            departmentAbstract: todo!(),
         };
         sign_vo.access_token = jwt_token.create_token(&CONTEXT.config.jwt_secret)?;
         sign_vo.role = CONTEXT

@@ -115,10 +115,9 @@ async fn checked_token(token: &HeaderValue, path: &str) -> Result<JWTToken, crat
     match &CONTEXT.config.keycloak_auth_server_certs.is_empty(){
           false=>{
            //   return  JWTToken::verify(&CONTEXT.config.jwt_secret, token_value);
-            //  let n=&CONTEXT.keycloak_keys.keys[0].n.as_ref().clone().unwrap();
-            //  let e=&CONTEXT.keycloak_keys.keys[0].e.as_ref().clone().unwrap();
-             let keycloak=&CONTEXT.keycloak_keys;
-              return  JWTToken::verify_with_keycloak(keycloak, token_value);
+             let n=&CONTEXT.keycloak_keys.keys[0].n.as_ref().clone().unwrap();
+             let e=&CONTEXT.keycloak_keys.keys[0].e.as_ref().clone().unwrap();
+              return  JWTToken::verify_with_keycloak(n,e, token_value);
           }
          _=>{
              return JWTToken::verify(&CONTEXT.config.jwt_secret, token_value);
@@ -139,22 +138,20 @@ async fn checked_token(token: &HeaderValue, path: &str) -> Result<JWTToken, crat
 async fn check_auth(token: JWTToken, path: &str) -> Result<(), crate::error::Error> {
     let sys_res = CONTEXT.sys_res_service.finds_all().await?;
     //权限校验
-    // for token_permission in &token.permissions {
-    //     for x in &sys_res {
-    //         match &x.permission {
-    //             Some(permission) => match &x.path {
-    //                 None => {}
-    //                 Some(x_path) => {
-    //                     if permission.eq(token_permission) && path.contains(x_path) {
-    //                         return Ok(());
-    //                     }
-    //                 }
-    //             },
-    //             _ => {}
-    //         }
-    //     }
-    // }
-    // return Err(crate::error::Error::from("无权限访问!"));
-
-    return Ok(());
+    for token_permission in &token.permissions {
+        for x in &sys_res {
+            match &x.permission {
+                Some(permission) => match &x.path {
+                    None => {}
+                    Some(x_path) => {
+                        if permission.eq(token_permission) && path.contains(x_path) {
+                            return Ok(());
+                        }
+                    }
+                },
+                _ => {}
+            }
+        }
+    }
+    return Err(crate::error::Error::from("无权限访问!"));
 }

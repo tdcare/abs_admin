@@ -1,0 +1,89 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "gdb",
+            "request": "attach",
+            "name": "Attach to PID",
+            "target": "[PID]",
+            "cwd": "${workspaceRoot}",
+            "valuesFormatting": "parseText"
+        },
+        
+        
+        
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Cargo launch",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--lib"
+                ]
+            },
+            "program": "${cargo:program}",
+            "args": []
+        },
+
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'abs_admin'",
+            "cargo": {
+                "args": [
+                    "run",
+                    "--no-run",
+                    "--lib",
+                    "--package=abs_admin"
+                ],
+                "filter": {
+                    "name": "abs_admin",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'abs_admin'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=abs_admin",
+                    "--package=abs_admin"
+                ],
+                "filter": {
+                    "name": "abs_admin",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'abs_admin'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=abs_admin",
+                    "--package=abs_admin"
+                ],
+                "filter": {
+                    "name": "abs_admin",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
