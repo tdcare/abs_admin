@@ -20,3 +20,10 @@ Cargo.lock
 /idea
 /.idea
 
+abs_admin.iml
+.gradle/5.6.2/gc.properties
+.gradle/5.6.2/fileChanges/last-build.bin
+.gradle/5.6.2/fileHashes/fileHashes.lock
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/buildOutputCleanup/cache.properties
+.gradle/vcs-1/gc.properties
