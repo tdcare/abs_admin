@@ -26,7 +26,7 @@ pub use sys_role_service::*;
 pub use sys_sms_service::*;
 pub use sys_user_role_service::*;
 pub use sys_user_service::*;
-use crate::domain::vo::Keys;
+use crate::domain::vo::{Keys, get_keycloak_keys};
 
 
 pub struct ServiceContext {
@@ -78,22 +78,8 @@ impl Default for ServiceContext {
         }
     }
 }
-pub async fn get_keycloak_keys(config: &ApplicationConfig)->Keys{
-    println!("[abs_admin] 开始访问keycloak");
-    let client = Client::new();
 
-    let res = client.get(Uri::from_static("http://122.9.125.181/auth/realms/tdcare/protocol/openid-connect/certs")).await.unwrap();
 
-    println!("status: {}", res.status());
-
-    let buf = hyper::body::to_bytes(res).await.unwrap();
-
-    println!("body: {:?}", buf);
-    let  keys= serde_json::from_slice::<Keys>(&buf).unwrap();
-
-    println!("[abs_admin] 取到了keycloak certs");
-    return keys;
-}
 lazy_static! {
     pub static ref CONTEXT: ServiceContext = ServiceContext::default();
 }
