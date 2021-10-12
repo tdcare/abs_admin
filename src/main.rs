@@ -26,7 +26,7 @@ async fn test() -> impl Responder {
 async fn main() -> std::io::Result<()> {
 
     //日志追加器
-    //abs_admin::config::log::init_log();
+    abs_admin::config::log::init_log();
     info!(
         " - Local:   http://{}",
         CONTEXT.config.server_url.replace("0.0.0.0", "127.0.0.1")

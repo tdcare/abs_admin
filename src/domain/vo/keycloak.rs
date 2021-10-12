@@ -2,7 +2,7 @@
  * @Author: tzw
  * @Date: 2021-07-21 22:45:16
  * @LastEditors: tzw
- * @LastEditTime: 2021-10-12 02:13:06
+ * @LastEditTime: 2021-10-12 15:59:26
  */
 
 use serde::{Deserialize, Serialize};
@@ -46,22 +46,3 @@ pub async fn get_keycloak_keys(config: &ApplicationConfig)->Keys{
     println!("[abs_admin] 取到了keycloak certs");
     return keys;
 }
-
-
-// pub async fn get_keycloak_keys(c: &'static str ) -> Keys{
-//     println!("[abs_admin] 开始访问keycloak");
-//     let client = Client::new();
-//     let url=Uri::from_static(&c);
-   
-//     let res = client.get(url).await.unwrap();
-
-//     println!("status: {}", res.status());
-
-//     let buf = hyper::body::to_bytes(res).await.unwrap();
-
-//     println!("body: {:?}", buf);
-//     let mut keys= serde_json::from_slice::<Keys>(&buf).unwrap();
-
-//     println!("[abs_admin] 取到了keycloak certs");
-//     return keys;
-// }
